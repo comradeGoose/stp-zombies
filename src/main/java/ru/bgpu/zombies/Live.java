@@ -15,7 +15,7 @@ public class Live {
     Image d = new ImageIcon(getClass().getResource("/image/d.png")).getImage();
     
     boolean go = false;
-    int live = 5;
+    int live = 6; //улучшение на свое усмотрение.
     int money = 0;
     
     Font font = new Font(Font.DIALOG, Font.BOLD,30);
