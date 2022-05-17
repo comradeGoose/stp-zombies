@@ -1,44 +1,22 @@
-
 package ru.bgpu.zombies;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageProducer;
 import java.io.BufferedInputStream;
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import javax.swing.*;
 
-public class Zombies extends JFrame implements ActionListener, KeyListener {
-
-    public static enum STATE {MENU,PLAY} //объявил перечисления
-
-    public static STATE state = STATE.PLAY; //изначально игра в режиме меню
+public class Zombies extends JFrame implements ActionListener , KeyListener, MouseListener, MouseMotionListener {
 
     public static final int Z_WIDTH  = 800;
     public static final int Z_HEIGHT = 500;
-
-    BufferedImage fon;
-    private static Graphics2D g;
-
-    private int buttno_n;
-    private float button_height_;
-    private float button_width_;
-    private float x;
-    private float y;
-    String[] list = new String[2];
-    Image blood_button = new ImageIcon(getClass().getResource("/image/krov.png")).getImage();
-    private Color _color_button_text;
-
 
 //    Image fon;
 
@@ -47,144 +25,177 @@ public class Zombies extends JFrame implements ActionListener, KeyListener {
     int interval = 10;
     boolean flock = false;
     int iteration = 0;
-    
-    ArrayList<Zombi> zombis = new ArrayList<>();
-    
-    Timer timer = new Timer(100, this);
-    
-    Player player = new Player(this);
-    Live  live = new Live();
 
+    ArrayList<Zombi> zombis = new ArrayList<>();
+
+    Timer timer = new Timer(100, this);
+    boolean timer_start = true;
+
+private Graphics gg;
+    Menu menyuha = new Menu();
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    public enum STATE{MENU,PLAY};
+
+public static STATE state = STATE.MENU;
+
+    Player player = new Player(this);
+    Live live = new Live();
+
+    public boolean click = false;
+
+
+    BufferedImage fon = new BufferedImage(Z_WIDTH, Z_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
     JPanel fonPanel = new JPanel() {
         @Override
         public void paint(Graphics g) {
-            if(state.equals(STATE.PLAY)){
+
+            if(state.equals(STATE.PLAY))
+            {
                 g.drawImage(fon, 0, 0, null);
                 player.paint(g);
                 for(int i=0; i<zombis.size(); i++) {
                     if(zombis.get(i).x < -100)  {
                         zombis.remove(i);
                         live.kill();
-                        if(live.live == 0) timer.stop();
+                        if(live.live == 0)
+                        {
+                            zombis.clear();
+                            //timer.stop();
+
+                        }
                         i--; continue;
                     }
                     zombis.get(i).paint(g);
                 }
                 live.paint(g);
+                if(live.money >= 666)
+                {
+                    player.skin_666 = true;
+                }
             }
-            if(state.equals(STATE.MENU)){
+
+            if (state.equals(STATE.MENU))
+            {
+
+
                 g.drawImage(fon, 0, 0, null);
+                menyuha.draw(g);
+                timer_start = true;
+                live.money = 0;
+                live.go = false;
+                live.live = 4;
+                player.skin_666 = false;
+
             }
+
         }
     };
 
     public Zombies() {
-        fon = new BufferedImage(Z_WIDTH, Z_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        g = (Graphics2D) fon.getGraphics();
 
-        if(state.equals(STATE.MENU)){
-
-            buttno_n = 2;
-            button_height_ = 100;
-            button_width_ = 200;
-            y = 0;
-            x = 100;
-            _color_button_text = Color.WHITE;
-
-
-            list[0] = "Играть";
-            list[1] = "Выход";
-
-            setTitle("Zombies!");
-            timer.start();
-            fon.createGraphics().drawImage(new ImageIcon(getClass().getResource("/image/fon.jpg")).getImage(),0,0,null);
-            fonPanel.setPreferredSize(new Dimension(Z_WIDTH, Z_HEIGHT));
-            setContentPane(fonPanel);
-            setResizable(false);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            addKeyListener(this);
-            pack();
-        }
-        if(state.equals(STATE.PLAY)){
-            setTitle("Zombies!");
-            timer.start();
-            fon.createGraphics().drawImage(new ImageIcon(getClass().getResource("/image/fon.jpg")).getImage(),0,0,null);
-            fonPanel.setPreferredSize(new Dimension(Z_WIDTH, Z_HEIGHT));
-            setContentPane(fonPanel);
-            setResizable(false);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            addKeyListener(this);
-            pack();
-        }
+        //button = new JButton();
+        //button.setBounds(100,100,100,100);
+        //button.addActionListener(this);
+        setTitle("Zombies!");
+        timer.start();
+        //gg = (Graphics) fon.getGraphics();
+        fon.createGraphics().drawImage(new ImageIcon(getClass().getResource("/image/fon.jpg")).getImage(),0,0,null);
+        fonPanel.setPreferredSize(new Dimension(Z_WIDTH, Z_HEIGHT));
+        setContentPane(fonPanel);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addKeyListener(this);
+        pack();
+        //this.add(button);
 
 
 
-
-    }
-    public void draw(Graphics graphics)
-    {
-        for(int i = 0; i < list.length; i++)
-        {
-            //распологаю в необходимых координатах
-            graphics.drawImage(blood_button, (int) x, (int) (y + 150) * i + 50, null);
-
-            graphics.setColor(_color_button_text);
-            Font font = new Font("Arial", Font.ITALIC,50);
-            graphics.setFont((font));//рисую шрифт
-
-            //длина надписи в пикселях
-            long length = (int) graphics.getFontMetrics().getStringBounds(list[i], graphics).getWidth();
-            //ставлю надпись по центру кнопки
-            graphics.drawString(list[i], (int)(x + button_width_ + 100) / 2 - (int)(length / 2), (int)((y + 140) * i + (button_height_ / 3) * 2) + 50);
-        }
+        //button = new JButton();
+        //button.setBounds(200,100,100,50);
+        //add(button);
     }
 
     public static void main(String[] args)
     {
-        if(state.equals(STATE.MENU))
-        {
-            Zombies zombies = new Zombies();
-            zombies.draw(g);
-            zombies.setVisible(true);
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int width = (int) screenSize.getWidth();
-            int height = (int) screenSize.getHeight();
-            zombies.setLocation(((width-Z_WIDTH)/2), ((height-Z_HEIGHT)/2));
-        }
-
-        if(state.equals(STATE.PLAY))
-        {
-            Zombies zombies = new Zombies();
-            zombies.setVisible(true);
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int width = (int) screenSize.getWidth();
-            int height = (int) screenSize.getHeight();
-            zombies.setLocation(((width-Z_WIDTH)/2), ((height-Z_HEIGHT)/2));
-        }
-
-
+        Zombies zombies = new Zombies();
+        zombies.setVisible(true);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+        zombies.setLocation(((width-Z_WIDTH)/2), ((height-Z_HEIGHT)/2));
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        fonPanel.repaint();
-        if(iteration++ > interval) {
-            Random r = new Random();
-            int count = r.nextInt(maxCount);
-            for(int i=0; i<count; i++) {
-                
-                Zombi z = new Zombi(this, Z_WIDTH);
-                z.spid = 10+r.nextInt(maxSpeed);
-                z.pIndex = r.nextInt(3);
-                zombis.add(z);
+    public void actionPerformed(ActionEvent e)
+    {
+        if(state.equals(STATE.PLAY))
+        {
+            fonPanel.repaint();
+            if(iteration++ > interval) {
+                Random r = new Random();
+                int count = r.nextInt(maxCount);
+                for(int i=0; i<count; i++) {
+
+                    Zombi z = new Zombi(this, Z_WIDTH);
+                    z.spid = 10+r.nextInt(maxSpeed);
+                    z.pIndex = r.nextInt(3);
+                    zombis.add(z);
+                }
+                iteration = 0;
             }
-            iteration = 0;
         }
-        
+        if(state.equals(STATE.MENU))
+        {
+            if(fonPanel.getMousePosition().x > menyuha.getX() && fonPanel.getMousePosition().x < menyuha.getX() + menyuha.getWidth() &&
+                    fonPanel.getMousePosition().y > (menyuha.getY()+140)*0+100 && fonPanel.getMousePosition().y < (menyuha.getY()+140)*0 + 100 + menyuha.getHeight())
+            {
+                menyuha.btn_game_play = true;
+                menyuha.scale_font[0] = 80;
+
+                if(click)
+                {
+                    zombis.clear();
+                    state = STATE.PLAY;
+                    click = false;
+                }
+
+            }else
+            {
+                menyuha.btn_game_play = false;
+                menyuha.scale_font[0] = 60;
+            }
+
+            if(fonPanel.getMousePosition().x > menyuha.getX() && fonPanel.getMousePosition().x < menyuha.getX() + menyuha.getWidth() &&
+                    fonPanel.getMousePosition().y > (menyuha.getY()+140)*1+100 && fonPanel.getMousePosition().y < (menyuha.getY()+140)*1+ 100 + menyuha.getHeight())
+            {
+                menyuha.scale_font[1] = 80;
+                if(click)
+                {
+                    System.exit(0);
+                }
+            }
+            else
+            {
+                menyuha.scale_font[1] = 60;
+            }
+            fonPanel.repaint();
+        }
+
+
     }
-    
-    
+
+
     public void fire(int line) {
         int index = -1;
         for(int i=0; i<zombis.size(); i++) {
@@ -206,20 +217,88 @@ public class Zombies extends JFrame implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_UP:
-                player.up();
-                break;
-            case KeyEvent.VK_DOWN:
-                player.down();
-                break;
-            case KeyEvent.VK_SPACE:
-                if(flock) break;
-                flock = true;
-                player.fire();
-                fire(player.pIndex);
-                break;
+        if(state == STATE.PLAY)
+        {
+            switch(e.getKeyCode())
+            {
+                case KeyEvent.VK_UP:
+                    player.up();
+                    break;
+                case KeyEvent.VK_W:
+                    player.up();
+                    break;
+                case KeyEvent.VK_DOWN:
+                    player.down();
+                    break;
+                case KeyEvent.VK_S:
+                    player.down();
+                    break;
+                case  KeyEvent.VK_ENTER:
+                    if(live.go)
+                    {
+                        if(flock) break;
+                        flock = true;
+                        state = STATE.MENU;
+                    }
+                    break;
+                case KeyEvent.VK_SPACE:
+                    if(timer_start)
+                    {
+                        if(flock) break;
+                        flock = true;
+                        player.fire();
+                        fire(player.pIndex);
+                    }
+                    break;
+            }
         }
+        if(state == STATE.MENU)
+        {
+            switch(e.getKeyCode())
+            {
+                case KeyEvent.VK_ENTER:
+                    if(flock) break;
+                    flock = true;
+                    zombis.clear();
+                    state = STATE.PLAY;
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    public void mousePressed(MouseEvent e)
+    {
+        if(e.getButton() == MouseEvent.BUTTON1){
+            if(state == STATE.MENU)
+            {
+                click = true;
+            }
+        }
+    }
+
+    public void mouseReleased(MouseEvent e)
+    {
+        if(e.getButton() == MouseEvent.BUTTON1){
+            if(state == STATE.MENU)
+            {
+                click = false;
+            }
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 
     @Override
@@ -228,29 +307,36 @@ public class Zombies extends JFrame implements ActionListener, KeyListener {
 
             case KeyEvent.VK_SPACE:
                 flock = false;
+                break;
+            case KeyEvent.VK_ENTER:
+                flock = false;
+                break;
         }
     }
-    
-    
+
+
+
+
     public static synchronized void playSound(final String url) {
-    new Thread(new Runnable() {
-    // The wrapper thread is unnecessary, unless it blocks on the
-    // Clip finishing; see comments.
-      @Override
-      public void run() {
-        try {
-          Clip clip = AudioSystem.getClip();
-          AudioInputStream inputStream = AudioSystem.getAudioInputStream( new BufferedInputStream(
-            Zombies.class.getResourceAsStream("/sounds/" + url)));
+        new Thread(
+                new Runnable() {
+            // The wrapper thread is unnecessary, unless it blocks on the
+            // Clip finishing; see comments.
+            @Override
+            public void run() {
+                try {
+                    Clip clip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream( new BufferedInputStream(
+                            Zombies.class.getResourceAsStream("/sounds/" + url)));
 //          InputStream bufferedIn = new BufferedInputStream(audioSrc);
 //AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
-          clip.open(inputStream);
-          clip.start(); 
-        } catch (Exception e) {
-          System.err.println(e.getMessage());
+                    clip.open(inputStream);
+                    clip.start();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
         }
-      }
+        ).start();
     }
-    ).start();
-  }
 }

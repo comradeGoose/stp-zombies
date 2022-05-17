@@ -9,13 +9,13 @@ import javax.swing.ImageIcon;
 
 
 public class Live {
-    
+
     Image GO = new ImageIcon(getClass().getResource("/image/go.png")).getImage();
     Image h = new ImageIcon(getClass().getResource("/image/h.png")).getImage();
     Image d = new ImageIcon(getClass().getResource("/image/d.png")).getImage();
     
     boolean go = false;
-    int live = 6; //улучшение на свое усмотрение.
+    int live = 4; //улучшение на свое усмотрение.
     int money = 0;
     
     Font font = new Font(Font.DIALOG, Font.BOLD,30);
