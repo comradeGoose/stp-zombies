@@ -20,6 +20,8 @@ public class Zombies extends JFrame implements ActionListener , KeyListener, Mou
 
 //    Image fon;
 
+
+
     int maxCount = 3;
     int maxSpeed = 15;
     int interval = 10;
