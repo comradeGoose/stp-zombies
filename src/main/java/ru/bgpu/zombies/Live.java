@@ -9,7 +9,8 @@ import javax.swing.ImageIcon;
 
 
 public class Live {
-
+    public int font_size = 60;
+    Image button_fon = new ImageIcon(getClass().getResource("/image/mainmenu_1.png")).getImage();
     Image GO = new ImageIcon(getClass().getResource("/image/go.png")).getImage();
     Image h = new ImageIcon(getClass().getResource("/image/h.png")).getImage();
     Image d = new ImageIcon(getClass().getResource("/image/d.png")).getImage();
@@ -26,7 +27,18 @@ public class Live {
     
     public void paint(Graphics g) {
         if(go) {
-            g.drawImage(GO, (Zombies.Z_WIDTH-GO.getWidth(null))/2, (Zombies.Z_HEIGHT-GO.getHeight(null))/2, null);
+            g.drawImage(GO, (Zombies.Z_WIDTH-GO.getWidth(null))/2, (Zombies.Z_HEIGHT-GO.getHeight(null))/2 - 50, null);
+
+            g.drawImage(button_fon, (Zombies.Z_WIDTH-GO.getWidth(null)),(Zombies.Z_HEIGHT-GO.getHeight(null))+100,null);
+
+            g.setColor(Color.white);
+            g.setFont(new Font("Bauhaus 93",Font.ITALIC,font_size));
+            long length_btn_name = (int)g.getFontMetrics().getStringBounds("Menu", g ).getWidth();
+            //g.drawString("Menu",(300 + 270 / 2)-(int)(length_btn_name / 2), ((425 + 140) + 100 + (100 / 3)*2));
+            g.drawString("Menu",300, 425);
+
+
+
         } else {
             for(int i=0; i<live; i++) {
                 g.drawImage(h, 30+i*35, 10, null);
@@ -37,7 +49,7 @@ public class Live {
         g.setColor(Color.GREEN);
         g.drawString(Integer.toString(money), Zombies.Z_WIDTH-150, 37);
         if(++iteration == interval) {
-            money++;
+            //money++;
         }
         iteration %= interval;
     }
@@ -49,6 +61,6 @@ public class Live {
     }
     
     public void up() {
-        money += 50;
+        money += 100;
     }
 }

@@ -9,10 +9,11 @@ public class Zombi {
     public final static int pozitions[] = {70, 170, 270};
     
     int pIndex = 0;
-    int spid = 10;
+    int spid = 7;
     int iterator = 0;
     int x;
     Zombies zombies;
+    //Random r_live;
     int fireIndex = -1;
     boolean kill = false;
     

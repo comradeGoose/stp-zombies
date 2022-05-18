@@ -33,7 +33,6 @@ public class Zombies extends JFrame implements ActionListener , KeyListener, Mou
     Timer timer = new Timer(100, this);
     boolean timer_start = true;
 
-private Graphics gg;
     Menu menyuha = new Menu();
 
     @Override
@@ -72,8 +71,8 @@ public static STATE state = STATE.MENU;
                         live.kill();
                         if(live.live == 0)
                         {
-                            zombis.clear();
                             //timer.stop();
+                            zombis.clear();
 
                         }
                         i--; continue;
@@ -81,7 +80,7 @@ public static STATE state = STATE.MENU;
                     zombis.get(i).paint(g);
                 }
                 live.paint(g);
-                if(live.money >= 666)
+                if(live.money >= 10000)
                 {
                     player.skin_666 = true;
                 }
@@ -89,8 +88,6 @@ public static STATE state = STATE.MENU;
 
             if (state.equals(STATE.MENU))
             {
-
-
                 g.drawImage(fon, 0, 0, null);
                 menyuha.draw(g);
                 timer_start = true;
@@ -118,9 +115,12 @@ public static STATE state = STATE.MENU;
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addKeyListener(this);
+        addMouseListener(this);
         pack();
-        //this.add(button);
 
+
+
+        //this.add(button);
 
 
         //button = new JButton();
@@ -136,6 +136,7 @@ public static STATE state = STATE.MENU;
         int width = (int) screenSize.getWidth();
         int height = (int) screenSize.getHeight();
         zombies.setLocation(((width-Z_WIDTH)/2), ((height-Z_HEIGHT)/2));
+
     }
 
     @Override
@@ -143,18 +144,43 @@ public static STATE state = STATE.MENU;
     {
         if(state.equals(STATE.PLAY))
         {
-            fonPanel.repaint();
-            if(iteration++ > interval) {
-                Random r = new Random();
-                int count = r.nextInt(maxCount);
-                for(int i=0; i<count; i++) {
+            if(live.live > 0)
+            {
+                fonPanel.repaint();
+                if(iteration++ > interval) {
+                    Random r = new Random();
+                    int count = r.nextInt(maxCount);
+                    for(int i=0; i<count; i++) {
 
-                    Zombi z = new Zombi(this, Z_WIDTH);
-                    z.spid = 10+r.nextInt(maxSpeed);
-                    z.pIndex = r.nextInt(3);
-                    zombis.add(z);
+                        Zombi z = new Zombi(this, Z_WIDTH);
+                        z.spid = 10+r.nextInt(maxSpeed);
+                        z.pIndex = r.nextInt(3);
+                        zombis.add(z);
+                    }
+                    iteration = 0;
                 }
-                iteration = 0;
+            }
+            if(live.go)
+            {
+
+                live.money = 0;
+                if(fonPanel.getMousePosition().x > 150 && fonPanel.getMousePosition().x < 450 &&
+                        fonPanel.getMousePosition().y > 290 && fonPanel.getMousePosition().y < 560)
+                {
+                    live.font_size = 80;
+
+                    if(click)
+                    {
+                        timer.restart();
+                        state = STATE.MENU;
+                        click = false;
+                    }
+
+                }else
+                {
+                    live.font_size = 60;
+                }
+                fonPanel.repaint();
             }
         }
         if(state.equals(STATE.MENU))
@@ -167,6 +193,7 @@ public static STATE state = STATE.MENU;
 
                 if(click)
                 {
+                    timer.restart();
                     zombis.clear();
                     state = STATE.PLAY;
                     click = false;
@@ -240,6 +267,7 @@ public static STATE state = STATE.MENU;
                     {
                         if(flock) break;
                         flock = true;
+                        timer.start();
                         state = STATE.MENU;
                     }
                     break;
@@ -280,6 +308,17 @@ public static STATE state = STATE.MENU;
             {
                 click = true;
             }
+            if( state == STATE.PLAY)
+            {
+                click = true;
+                if(!live.go)
+                {
+                    if(flock) return;
+                    flock = true;
+                    player.fire();
+                    fire(player.pIndex);
+                }
+            }
         }
     }
 
@@ -289,6 +328,15 @@ public static STATE state = STATE.MENU;
             if(state == STATE.MENU)
             {
                 click = false;
+            }
+            if(state == STATE.PLAY)
+            {
+                click = false;
+                if(!live.go)
+                {
+                    flock = false;
+                    return;
+                }
             }
         }
     }
