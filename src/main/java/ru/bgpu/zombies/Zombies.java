@@ -6,12 +6,27 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageProducer;
 import java.io.BufferedInputStream;
 import java.io.Console;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.sound.sampled.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 
 public class Zombies extends JFrame implements ActionListener , KeyListener, MouseListener, MouseMotionListener {
 
@@ -54,6 +69,7 @@ public static STATE state = STATE.MENU;
 
     public boolean click = false;
 
+    //private static FloatControl volumeControl = null;
 
     BufferedImage fon = new BufferedImage(Z_WIDTH, Z_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
@@ -80,7 +96,7 @@ public static STATE state = STATE.MENU;
                     zombis.get(i).paint(g);
                 }
                 live.paint(g);
-                if(live.money >= 10000)
+                if(live.money >= 6666)
                 {
                     player.skin_666 = true;
                 }
@@ -102,6 +118,8 @@ public static STATE state = STATE.MENU;
     };
 
     public Zombies() {
+
+        //Zombies.playSound("Flight_to_LAPD_WAW.waw");
 
         //button = new JButton();
         //button.setBounds(100,100,100,100);
@@ -130,6 +148,7 @@ public static STATE state = STATE.MENU;
 
     public static void main(String[] args)
     {
+        Zombies.playSound("Flight_to_LAPD_WAW.wav");
         Zombies zombies = new Zombies();
         zombies.setVisible(true);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -185,6 +204,8 @@ public static STATE state = STATE.MENU;
         }
         if(state.equals(STATE.MENU))
         {
+
+
             if(fonPanel.getMousePosition().x > menyuha.getX() && fonPanel.getMousePosition().x < menyuha.getX() + menyuha.getWidth() &&
                     fonPanel.getMousePosition().y > (menyuha.getY()+140)*0+100 && fonPanel.getMousePosition().y < (menyuha.getY()+140)*0 + 100 + menyuha.getHeight())
             {
@@ -280,6 +301,24 @@ public static STATE state = STATE.MENU;
                         fire(player.pIndex);
                     }
                     break;
+                case  KeyEvent.VK_M:
+                    if(!live.go)
+                    {
+                        if(flock) break;
+                        for(int i = 0; i<4 ;i++)
+                        {
+                            if(live.med_kit_icon_index[i] == 0){
+                                live.med_kit_icon_index[i] = 1;
+                                if (live.live < 4)
+                                {
+                                    live.live++;
+                                }
+                                return;
+                            }
+                        }
+                    }
+                    break;
+
             }
         }
         if(state == STATE.MENU)
@@ -365,28 +404,28 @@ public static STATE state = STATE.MENU;
     }
 
 
-
-
-    public static synchronized void playSound(final String url) {
+    public static synchronized void playSound(final String url)
+    {
         new Thread(
-                new Runnable() {
-            // The wrapper thread is unnecessary, unless it blocks on the
-            // Clip finishing; see comments.
+                new Runnable()
+                {
             @Override
-            public void run() {
-                try {
+            public void run()
+            {
+                try
+                {
                     Clip clip = AudioSystem.getClip();
-                    AudioInputStream inputStream = AudioSystem.getAudioInputStream( new BufferedInputStream(
-                            Zombies.class.getResourceAsStream("/sounds/" + url)));
-//          InputStream bufferedIn = new BufferedInputStream(audioSrc);
-//AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream( new BufferedInputStream(Zombies.class.getResourceAsStream("/sounds/" + url)));
                     clip.open(inputStream);
                     clip.start();
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     System.err.println(e.getMessage());
                 }
             }
-        }
-        ).start();
+        }).start();
     }
+
+
 }

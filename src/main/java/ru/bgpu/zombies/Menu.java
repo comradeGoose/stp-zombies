@@ -22,6 +22,7 @@ public class Menu
 
     public Menu()
     {
+
         x = 50;
         y = 50;
         height = 100;
