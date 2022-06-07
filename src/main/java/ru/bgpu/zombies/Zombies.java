@@ -69,6 +69,12 @@ public static STATE state = STATE.MENU;
 
     public boolean click = false;
 
+    public Med_Kit_Help med_kit_help = new Med_Kit_Help();
+    public boolean med_kit = false;
+    public boolean med_kit_use = false;
+    public static int local_pos_med_x = 800;
+    public static int local_pos_med_y = 500;
+
     //private static FloatControl volumeControl = null;
 
     BufferedImage fon = new BufferedImage(Z_WIDTH, Z_HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -96,6 +102,15 @@ public static STATE state = STATE.MENU;
                     zombis.get(i).paint(g);
                 }
                 live.paint(g);
+
+                if(med_kit == true /*|| local_pos_med_y != 500*/)
+                {
+                    med_kit_help.paint(g);
+                    med_kit_use = true;
+                }
+
+
+
                 if(live.money >= 6666)
                 {
                     player.skin_666 = true;
@@ -110,6 +125,9 @@ public static STATE state = STATE.MENU;
                 live.money = 0;
                 live.go = false;
                 live.live = 4;
+                for(int i = 0;i < 4;i++) {
+                    live.med_kit_icon_index[i] = 0;
+                }
                 player.skin_666 = false;
 
             }
@@ -246,13 +264,18 @@ public static STATE state = STATE.MENU;
     }
 
 
-    public void fire(int line) {
+    public void fire(int line)
+    {
         int index = -1;
-        for(int i=0; i<zombis.size(); i++) {
-            if(zombis.get(i).x > 50 && !zombis.get(i).kill && zombis.get(i).pIndex == line) {
-                if(index == -1) {
+        for(int i=0; i<zombis.size(); i++)
+        {
+            if(zombis.get(i).x > 50 && !zombis.get(i).kill && zombis.get(i).pIndex == line)
+            {
+                if(index == -1)
+                {
                     index = i;
-                } else if(zombis.get(i).x < zombis.get(index).x) {
+                } else if(zombis.get(i).x < zombis.get(index).x)
+                {
                     index = i;
                 }
             }
@@ -260,6 +283,18 @@ public static STATE state = STATE.MENU;
         if(index != -1) {
             zombis.get(index).fire();
         }
+        if(med_kit_use == true)
+        {
+            for(int i=0; i<med_kit_help.positions.length; i++)
+            {
+                if(med_kit_help.id==line)
+                {
+                    med_kit_help.fire(1);
+                }
+            }
+        }
+
+
     }
 
     @Override
@@ -271,6 +306,12 @@ public static STATE state = STATE.MENU;
         {
             switch(e.getKeyCode())
             {
+                case KeyEvent.VK_V:
+                    if(live.money > 1)
+                    {
+                        med_kit_help();
+                    }
+                    break;
                 case KeyEvent.VK_UP:
                     player.up();
                     break;
@@ -309,6 +350,7 @@ public static STATE state = STATE.MENU;
                         {
                             if(live.med_kit_icon_index[i] == 0){
                                 live.med_kit_icon_index[i] = 1;
+                                Zombies.playSound("13895-aptechki-half-life-2.wav");
                                 if (live.live < 4)
                                 {
                                     live.live++;
@@ -333,6 +375,13 @@ public static STATE state = STATE.MENU;
                     break;
             }
         }
+    }
+
+    public void med_kit_help()
+    {
+        live.money -= 1;
+        playSound("airplane_sound.wav");
+        med_kit = true;
     }
 
     @Override
