@@ -50,7 +50,7 @@ public class Live {
                 med_kit_icon_[i] = new ImageIcon(getClass().getResource("/image/med_kit_icon_"+ med_kit_icon_index[i] +".png")).getImage();
                 g.drawImage(med_kit_icon_[i], 200+i*35, 10, null);
             }
-            if(money > 1)
+            if(money > 10000)
             {
                 g.drawImage(airplane, 400 , 0 , null);
             }
