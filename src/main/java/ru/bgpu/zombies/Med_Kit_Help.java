@@ -23,7 +23,7 @@ public class Med_Kit_Help
 
         if(x<300)
         {
-            x += 250;
+            x += 200;
         }
 
         if(Zombies.local_pos_med_y != 0)

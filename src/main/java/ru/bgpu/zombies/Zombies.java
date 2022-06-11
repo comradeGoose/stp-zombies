@@ -61,7 +61,16 @@ public class Zombies extends JFrame implements ActionListener , KeyListener, Mou
     @Override
     public void mouseDragged(MouseEvent e)
     {
-
+        if( state == STATE.PLAY)
+        {
+            if(e.getButton() == MouseEvent.BUTTON1)
+            {
+                if(getMousePosition().x >= 470 && getMousePosition().x <= 530 && getMousePosition().y >= 0 && getMousePosition().y <= 60)
+                {
+                    set_pos_Sentry_Gun = true;
+                }
+            }
+        }
     }
 
     @Override
@@ -87,6 +96,8 @@ public static STATE state = STATE.MENU;
     BufferedImage fon = new BufferedImage(Z_WIDTH, Z_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
     Sentry_Gun_Help _Sentry_Gun = new Sentry_Gun_Help(this);
+    private Image _Gun_Image = new ImageIcon(getClass().getResource("/image/sentry_gun.png")).getImage();
+    boolean set_pos_Sentry_Gun = false;
 
     JPanel fonPanel = new JPanel()
     {
@@ -96,14 +107,25 @@ public static STATE state = STATE.MENU;
 
             if(state.equals(STATE.PLAY))
             {
+
+
+                g.drawImage(fon, 0, 0, null);
+
+
+                _Sentry_Gun.paint(g);
+                player.paint(g);
+
+                if(set_pos_Sentry_Gun)
+                {
+                    g.drawImage(_Gun_Image, fonPanel.getMousePosition().x - 50, fonPanel.getMousePosition().y - 55, null);
+                }
+
+
+
                 if(med_kit_call)
                 {
                     med_kit_help.get(0).paint(g);
                 }
-
-                g.drawImage(fon, 0, 0, null);
-                _Sentry_Gun.paint(g);
-                player.paint(g);
 
                 for(int i=0; i<zombis.size(); i++)
                 {
@@ -123,7 +145,10 @@ public static STATE state = STATE.MENU;
                 live.paint(g);
 
 
-
+                if(med_kit_call)
+                {
+                    med_kit_help.get(0).paint(g);
+                }
 
 
                 if(live.money >= 6666)
@@ -182,12 +207,24 @@ public static STATE state = STATE.MENU;
     {
         if(state.equals(STATE.PLAY))
         {
+
+
             sentry_gun_fire();
             if(live.live > 0)
             {
                 fonPanel.repaint();
 
-                if(iteration++ > interval) {
+                       // if(set_pos_Sentry_Gun)
+                       // {
+                        //    System.out.println("клик");
+                        //    set_pos_Sentry_Gun = true;
+//
+                        //}
+
+
+
+                if(iteration++ > interval)
+                {
                     Random r = new Random();
                     int count;
                     if(live._time > 60)
@@ -439,6 +476,39 @@ public static STATE state = STATE.MENU;
 
     public void mousePressed(MouseEvent e)
     {
+        //взять турель
+        if( state == STATE.PLAY)
+        {
+            if(e.getButton() == MouseEvent.BUTTON3)
+            {
+                if(!live.go)
+                {
+                    if(!set_pos_Sentry_Gun)
+                    {
+                        if(fonPanel.getMousePosition().x >= 470 && fonPanel.getMousePosition().x <= 530 && fonPanel.getMousePosition().y >= 0 && fonPanel.getMousePosition().y <= 60)
+                        {
+                            set_pos_Sentry_Gun = true;
+                        }
+                    }
+                    else
+                    {
+                        for(int i = 0; i < 3; i++)
+                        {
+
+                            if(fonPanel.getMousePosition().x >= 110 && fonPanel.getMousePosition().x <= 290 && fonPanel.getMousePosition().y >= _Sentry_Gun._pozitions[i] + 100 && fonPanel.getMousePosition().y <= _Sentry_Gun._pozitions[i] + 150)
+                            {
+                                _Sentry_Gun.pose = i;
+                                set_pos_Sentry_Gun = false;
+                            }
+                        }
+
+                    }
+
+
+                }
+            }
+        }
+
         if(e.getButton() == MouseEvent.BUTTON1)
         {
             if(state == STATE.MENU)
@@ -461,7 +531,8 @@ public static STATE state = STATE.MENU;
 
     public void mouseReleased(MouseEvent e)
     {
-        if(e.getButton() == MouseEvent.BUTTON1){
+        if(e.getButton() == MouseEvent.BUTTON1)
+        {
             if(state == STATE.MENU)
             {
                 click = false;
@@ -476,6 +547,19 @@ public static STATE state = STATE.MENU;
                 }
             }
         }
+        if(e.getButton() == MouseEvent.BUTTON3)
+        {
+            if(state == STATE.PLAY)
+            {
+                click = false;
+                if(!live.go)
+                {
+                    flock = false;
+                    return;
+                }
+            }
+        }
+
     }
 
     @Override
