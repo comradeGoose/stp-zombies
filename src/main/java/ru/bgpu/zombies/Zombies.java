@@ -101,6 +101,9 @@ public static STATE state = STATE.MENU;
     boolean set_image_Sentry_Gun = false;
     //ArrayList<Sentry_Gun_Help> _Sentry_Gun_l = new ArrayList<>();
 
+
+    boolean play_sounds = false;
+
     JPanel fonPanel = new JPanel()
     {
         @Override
@@ -110,10 +113,7 @@ public static STATE state = STATE.MENU;
             if(state.equals(STATE.PLAY))
             {
 
-
                 g.drawImage(fon, 0, 0, null);
-
-
                 _Sentry_Gun.paint(g);
                 player.paint(g);
 
@@ -209,7 +209,17 @@ public static STATE state = STATE.MENU;
 
     public Zombies()
     {
-        setTitle("Zombies!");
+        double r = Math.random();
+        if(r > 0.5)
+        {
+            Zombies.playSound("Flight_to_LAPD_WAW.wav");
+        }
+        else
+        {
+            Zombies.playSound("meme.wav");
+        }
+
+        setTitle("♂Zombies♂");
         timer.start();
         fon.createGraphics().drawImage(new ImageIcon(getClass().getResource("/image/fon.jpg")).getImage(),0,0,null);
         fonPanel.setPreferredSize(new Dimension(Z_WIDTH, Z_HEIGHT));
@@ -219,11 +229,11 @@ public static STATE state = STATE.MENU;
         addKeyListener(this);
         addMouseListener(this);
         pack();
+
     }
 
     public static void main(String[] args)
     {
-        Zombies.playSound("Flight_to_LAPD_WAW.wav");
         Zombies zombies = new Zombies();
         zombies.setVisible(true);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -453,6 +463,7 @@ public static STATE state = STATE.MENU;
                     }
                     break;
                 case  KeyEvent.VK_M:
+
                     if(!live.go)
                     {
                         if(flock) break;
@@ -469,6 +480,7 @@ public static STATE state = STATE.MENU;
                             }
                         }
                     }
+
                     break;
 
             }
@@ -483,6 +495,16 @@ public static STATE state = STATE.MENU;
                     zombis.clear();
                     state = STATE.PLAY;
                     break;
+                //case  KeyEvent.VK_M:
+                //    if(play_sounds)
+                //    {
+                //        play_sounds = false;
+                //    }
+                //    else
+                //    {
+                //        play_sounds = true;
+                //    }
+                //    break;
             }
         }
     }
