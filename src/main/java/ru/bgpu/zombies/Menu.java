@@ -29,20 +29,25 @@ public class Menu
         width = 200;
         list_btn[0] = "Play";
         list_btn[1] = "Exit";
+        //list_btn[2] = "Control";
         buttno_text_color = Color.WHITE;
     }
 
 
-    public int getX(){
+    public int getX()
+    {
         return x;
     }
-    public int getY(){
+    public int getY()
+    {
         return y;
     }
-    public int getWidth(){
+    public int getWidth()
+    {
         return width;
     }
-    public int getHeight(){
+    public int getHeight()
+    {
         return  height;
     }
 

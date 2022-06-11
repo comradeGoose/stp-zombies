@@ -7,6 +7,7 @@ import java.awt.image.ImageProducer;
 import java.io.BufferedInputStream;
 import java.io.Console;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.sound.sampled.*;
@@ -95,6 +96,11 @@ public static STATE state = STATE.MENU;
 
             if(state.equals(STATE.PLAY))
             {
+                if(med_kit_call)
+                {
+                    med_kit_help.get(0).paint(g);
+                }
+
                 g.drawImage(fon, 0, 0, null);
                 _Sentry_Gun.paint(g);
                 player.paint(g);
@@ -117,10 +123,7 @@ public static STATE state = STATE.MENU;
                 live.paint(g);
 
 
-                if(med_kit_call)
-                {
-                    med_kit_help.get(0).paint(g);
-                }
+
 
 
                 if(live.money >= 6666)
@@ -180,7 +183,6 @@ public static STATE state = STATE.MENU;
         if(state.equals(STATE.PLAY))
         {
             sentry_gun_fire();
-
             if(live.live > 0)
             {
                 fonPanel.repaint();
@@ -320,14 +322,16 @@ public static STATE state = STATE.MENU;
     public void sentry_gun_fire()
     {
         int index= -1;
-        for(int i=0; i<zombis.size(); i++)
-        {
-            if(_Sentry_Gun.shot && zombis.get(i).x > 200 && zombis.get(i).x < 600 && !zombis.get(i).kill && zombis.get(i).pIndex == 1)
+
+            for(int i=0; i<zombis.size(); i++)
             {
-                index = i;
-                _Sentry_Gun.fire();
+                if(_Sentry_Gun.shot && zombis.get(i).x > 200 && zombis.get(i).x < 600 && !zombis.get(i).kill && zombis.get(i).pIndex == _Sentry_Gun.pose)
+                {
+                    index = i;
+                    _Sentry_Gun.fire();
+                }
             }
-        }
+
         if(index != -1)
         {
             zombis.get(index).fire();

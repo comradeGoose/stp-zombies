@@ -38,7 +38,7 @@ public class Live {
 
             g.setColor(Color.white);
             g.setFont(new Font("Bauhaus 93",Font.ITALIC,font_size));
-            long length_btn_name = (int)g.getFontMetrics().getStringBounds("Menu", g ).getWidth();
+            //long length_btn_name = (int)g.getFontMetrics().getStringBounds("Menu", g ).getWidth();
             //g.drawString("Menu",(300 + 270 / 2)-(int)(length_btn_name / 2), ((425 + 140) + 100 + (100 / 3)*2));
             g.drawString("Menu",300, 425);
 
@@ -54,7 +54,7 @@ public class Live {
             }
             if(money > 10000)
             {
-                g.drawImage(airplane, 400 , 0 , null);
+                g.drawImage(airplane, 350 , 0 , null);
             }
         }
         g.drawImage(d, Zombies.Z_WIDTH-200, 10, null);
@@ -64,7 +64,7 @@ public class Live {
         if(++iteration == interval) {
             money++;
             _time++;
-            System.out.println(_time);
+            //System.out.println(_time);
         }
         iteration %= interval;
     }
