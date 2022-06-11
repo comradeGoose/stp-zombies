@@ -5,10 +5,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.sql.SQLOutput;
 import javax.swing.ImageIcon;
 
 
 public class Live {
+    public int _time;
     public int font_size = 60;
     Image button_fon = new ImageIcon(getClass().getResource("/image/mainmenu_1.png")).getImage();
     Image GO = new ImageIcon(getClass().getResource("/image/go.png")).getImage();
@@ -24,7 +26,7 @@ public class Live {
     
     Font font = new Font(Font.DIALOG, Font.BOLD,30);
     
-    int interval = 5;
+    int interval = 10;
     int iteration = 0;
     
     
@@ -60,7 +62,9 @@ public class Live {
         g.setColor(Color.GREEN);
         g.drawString(Integer.toString(money), Zombies.Z_WIDTH-150, 37);
         if(++iteration == interval) {
-            //money++;
+            money++;
+            _time++;
+            System.out.println(_time);
         }
         iteration %= interval;
     }
@@ -71,7 +75,8 @@ public class Live {
         money -= 300;
     }
     
-    public void up() {
+    public void up()
+    {
         money += 100;
     }
 }

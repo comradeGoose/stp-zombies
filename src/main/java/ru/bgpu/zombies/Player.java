@@ -30,13 +30,13 @@ public class Player {
 
 
 
-    public Player(Zombies zombies) {
+    public Player(Zombies zombies)
+    {
         this.zombies = zombies;
     }
-    
-    
-    
-    public void paint(Graphics g) {
+
+    public void paint(Graphics g)
+    {
 
         if(skin_666)
         {
@@ -46,28 +46,50 @@ public class Player {
         {
             g.drawImage(fon, 50, pozitions[pIndex], null);
         }
-        if(fireIndex >= 0) {
-            if(fireIndex >= fire.length) {
+        if(fireIndex >= 0)
+        {
+            if(fireIndex >= fire.length)
+            {
                 fireIndex = -1;
                 lock = false;
-            } else {
+            }
+            else
+            {
                 g.drawImage(fire[fireIndex++], 50, pozitions[pIndex], null);
             }
         }
     }
     
-    public void up() {
-        if(lock) return;
-        if(--pIndex < 0) pIndex = 0;
+    public void up()
+    {
+        if(lock)
+        {
+            return;
+        }
+        if(--pIndex < 0)
+        {
+            pIndex = 0;
+        }
     }
     
-    public void down() {
-        if(lock) return;
-        if(++pIndex >= pozitions.length) pIndex = pozitions.length-1;
+    public void down()
+    {
+        if(lock)
+        {
+            return;
+        }
+        if(++pIndex >= pozitions.length)
+        {
+            pIndex = pozitions.length-1;
+        }
     }
     
-    public void fire(){
-        if(lock) return;
+    public void fire()
+    {
+        if(lock)
+        {
+            return;
+        }
         Zombies.playSound("fire.wav");
         lock = true;
         fireIndex = 0;

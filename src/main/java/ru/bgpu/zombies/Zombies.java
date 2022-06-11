@@ -15,6 +15,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,8 +41,9 @@ public class Zombies extends JFrame implements ActionListener , KeyListener, Mou
 
 
 
-    int maxCount = 3;
-    int maxSpeed = 15;
+    int maxCount = 2;
+    int time_maxCount = 4;
+    int maxSpeed = 20;
     int interval = 10;
     boolean flock = false;
     int iteration = 0;
@@ -48,15 +53,19 @@ public class Zombies extends JFrame implements ActionListener , KeyListener, Mou
     Timer timer = new Timer(100, this);
     boolean timer_start = true;
 
+
+
     Menu menyuha = new Menu();
 
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseDragged(MouseEvent e)
+    {
 
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(MouseEvent e)
+    {
 
     }
 
@@ -74,18 +83,22 @@ public static STATE state = STATE.MENU;
     public boolean med_kit_use = false;
     public static int local_pos_med_x = 0;
     public static int local_pos_med_y = 0;
-
     BufferedImage fon = new BufferedImage(Z_WIDTH, Z_HEIGHT, BufferedImage.TYPE_INT_RGB);
+
+    Sentry_Gun_Help _Sentry_Gun = new Sentry_Gun_Help(this);
 
     JPanel fonPanel = new JPanel()
     {
         @Override
         public void paint(Graphics g)
         {
+
             if(state.equals(STATE.PLAY))
             {
                 g.drawImage(fon, 0, 0, null);
+                _Sentry_Gun.paint(g);
                 player.paint(g);
+
                 for(int i=0; i<zombis.size(); i++)
                 {
                     if(zombis.get(i).x < -100)
@@ -124,6 +137,7 @@ public static STATE state = STATE.MENU;
                 live.money = 0;
                 live.go = false;
                 live.live = 4;
+                live._time = 0;
 
                 for(int i = 0;i < 4;i++)
                 {
@@ -165,13 +179,24 @@ public static STATE state = STATE.MENU;
     {
         if(state.equals(STATE.PLAY))
         {
+            sentry_gun_fire();
+
             if(live.live > 0)
             {
                 fonPanel.repaint();
 
                 if(iteration++ > interval) {
                     Random r = new Random();
-                    int count = r.nextInt(maxCount);
+                    int count;
+                    if(live._time > 60)
+                    {
+                        count = r.nextInt(time_maxCount);
+                    }
+                    else
+                    {
+                        count = r.nextInt(maxCount);
+                    }
+
                     for(int i=0; i<count; i++) {
 
                         Zombi z = new Zombi(this, Z_WIDTH);
@@ -290,11 +315,26 @@ public static STATE state = STATE.MENU;
                 }
             }
         }
+    }
 
-
-
+    public void sentry_gun_fire()
+    {
+        int index= -1;
+        for(int i=0; i<zombis.size(); i++)
+        {
+            if(_Sentry_Gun.shot && zombis.get(i).x > 200 && zombis.get(i).x < 600 && !zombis.get(i).kill && zombis.get(i).pIndex == 1)
+            {
+                index = i;
+                _Sentry_Gun.fire();
+            }
+        }
+        if(index != -1)
+        {
+            zombis.get(index).fire();
+        }
 
     }
+
 
     @Override
     public void keyTyped(KeyEvent e) {}
@@ -388,13 +428,15 @@ public static STATE state = STATE.MENU;
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e)
+    {
 
     }
 
     public void mousePressed(MouseEvent e)
     {
-        if(e.getButton() == MouseEvent.BUTTON1){
+        if(e.getButton() == MouseEvent.BUTTON1)
+        {
             if(state == STATE.MENU)
             {
                 click = true;
