@@ -11,8 +11,8 @@ public class Sentry_Gun_Help
     private Image _Shot1 = new ImageIcon(getClass().getResource("/image/fire1.png")).getImage();
     private Image _Shot2 = new ImageIcon(getClass().getResource("/image/fire2.png")).getImage();
     private Image _Shot3 = new ImageIcon(getClass().getResource("/image/fire3.png")).getImage();
-    private Image _Placement = new ImageIcon(getClass().getResource("/image/placement_0.png")).getImage();
-    private Image _Select_Placement = new ImageIcon(getClass().getResource("/image/placement_1.png")).getImage();
+    public Image _Placement = new ImageIcon(getClass().getResource("/image/placement_0.png")).getImage();
+    public Image _Select_Placement = new ImageIcon(getClass().getResource("/image/placement_1.png")).getImage();
 
     public int _pozitions[] = {150, 250, 350};
     public Image[] _Shot = {_Shot1, _Shot2, _Shot3};
@@ -40,11 +40,8 @@ public class Sentry_Gun_Help
     public void paint(Graphics g)
     {
         g.drawImage(_Gun_Image_Icon, 500, 0, null);
-        for(int i = 0; i<3; i++)
-        {
-            _Placements[pose] = _Select_Placement;
-            g.drawImage(_Placements[i], 200, _pozitions[i] + 100, null);
-        }
+
+
         g.drawImage(_Gun_Image, 245, _pozitions[pose] + 10, null);
 
         if(_fireIndex >= 0)

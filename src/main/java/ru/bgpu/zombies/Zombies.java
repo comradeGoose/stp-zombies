@@ -98,6 +98,8 @@ public static STATE state = STATE.MENU;
     Sentry_Gun_Help _Sentry_Gun = new Sentry_Gun_Help(this);
     private Image _Gun_Image = new ImageIcon(getClass().getResource("/image/sentry_gun.png")).getImage();
     boolean set_pos_Sentry_Gun = false;
+    boolean set_image_Sentry_Gun = false;
+    //ArrayList<Sentry_Gun_Help> _Sentry_Gun_l = new ArrayList<>();
 
     JPanel fonPanel = new JPanel()
     {
@@ -117,8 +119,34 @@ public static STATE state = STATE.MENU;
 
                 if(set_pos_Sentry_Gun)
                 {
+                    for(int i = 0; i < 3; i++)
+                    {
+                        if(set_image_Sentry_Gun)
+                        {
+                            _Sentry_Gun._Placements[i] = _Sentry_Gun._Select_Placement;
+
+                        }
+                        else
+                        {
+                            _Sentry_Gun._Placements[i] = _Sentry_Gun._Placement;
+                        }
+                    }
+
+                    for(int i = 0; i<3; i++)
+                    {
+                        _Sentry_Gun._Placements[_Sentry_Gun.pose] = _Sentry_Gun._Select_Placement;
+                        g.drawImage(_Sentry_Gun._Placements[i], 200, _Sentry_Gun._pozitions[i] + 100, null);
+                    }
                     g.drawImage(_Gun_Image, fonPanel.getMousePosition().x - 50, fonPanel.getMousePosition().y - 55, null);
                 }
+                else
+                {
+                    for(int i = 0; i<3; i++)
+                    {
+                        _Sentry_Gun._Placements[i] = _Sentry_Gun._Placement;
+                    }
+                }
+
 
 
 
@@ -166,8 +194,10 @@ public static STATE state = STATE.MENU;
                 live.go = false;
                 live.live = 4;
                 live._time = 0;
+                set_pos_Sentry_Gun = false;
+                set_image_Sentry_Gun = false;
 
-                for(int i = 0;i < 4;i++)
+                for(int i = 0; i < 4; i++)
                 {
                     live.med_kit_icon_index[i] = 0;
                 }
@@ -497,6 +527,9 @@ public static STATE state = STATE.MENU;
 
                             if(fonPanel.getMousePosition().x >= 110 && fonPanel.getMousePosition().x <= 290 && fonPanel.getMousePosition().y >= _Sentry_Gun._pozitions[i] + 100 && fonPanel.getMousePosition().y <= _Sentry_Gun._pozitions[i] + 150)
                             {
+                                //Sentry_Gun_Help _sentry_gun = new Sentry_Gun_Help(this);
+                                //_Sentry_Gun_l.add(_sentry_gun);
+                                //_Sentry_Gun_l.get(_Sentry_Gun_l.size() - 1).pose = i;
                                 _Sentry_Gun.pose = i;
                                 set_pos_Sentry_Gun = false;
                             }
@@ -547,24 +580,36 @@ public static STATE state = STATE.MENU;
                 }
             }
         }
-        if(e.getButton() == MouseEvent.BUTTON3)
-        {
-            if(state == STATE.PLAY)
-            {
-                click = false;
-                if(!live.go)
-                {
-                    flock = false;
-                    return;
-                }
-            }
-        }
 
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent e)
+    {
 
+        if( state == STATE.PLAY)
+        {
+            if(e.getButton() == MouseEvent.BUTTON3)
+            {
+                if(!live.go)
+                {
+                    if(set_pos_Sentry_Gun)
+                    {
+                        for(int i = 0; i < 3; i++)
+                        {
+                            if(fonPanel.getMousePosition().x >= 110 && fonPanel.getMousePosition().x <= 290 && fonPanel.getMousePosition().y >= _Sentry_Gun._pozitions[i] + 100 && fonPanel.getMousePosition().y <= _Sentry_Gun._pozitions[i] + 150)
+                            {
+                                set_image_Sentry_Gun = true;
+                            }
+                            else
+                            {
+                                set_image_Sentry_Gun = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
