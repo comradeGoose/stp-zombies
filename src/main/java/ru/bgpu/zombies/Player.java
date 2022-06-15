@@ -6,10 +6,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 
-public class Player {
-
-    Live live = new Live();
-
+public class Player
+{
     Image fon = new ImageIcon(getClass().getResource("/image/player-m-0.png")).getImage();
     Image fon_6666 = new ImageIcon(getClass().getResource("/image/player.png")).getImage();
     Image f1 = new ImageIcon(getClass().getResource("/image/fire1.png")).getImage();

@@ -33,14 +33,11 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 
-public class Zombies extends JFrame implements ActionListener , KeyListener, MouseListener, MouseMotionListener {
+public class Zombies extends JFrame implements ActionListener , KeyListener, MouseListener, MouseMotionListener
+{
 
     public static final int Z_WIDTH  = 800;
     public static final int Z_HEIGHT = 500;
-
-//    Image fon;
-
-
 
     int maxCount = 2;
     int time_maxCount = 4;
@@ -54,23 +51,21 @@ public class Zombies extends JFrame implements ActionListener , KeyListener, Mou
     Timer timer = new Timer(100, this);
     boolean timer_start = true;
 
-
-
     Menu menyuha = new Menu();
 
     @Override
     public void mouseDragged(MouseEvent e)
     {
-        if( state == STATE.PLAY)
-        {
-            if(e.getButton() == MouseEvent.BUTTON1)
-            {
-                if(getMousePosition().x >= 470 && getMousePosition().x <= 530 && getMousePosition().y >= 0 && getMousePosition().y <= 60)
-                {
-                    set_pos_Sentry_Gun = true;
-                }
-            }
-        }
+        //if(state == STATE.PLAY)
+        //{
+        //    if(e.getButton() == MouseEvent.BUTTON1)
+        //    {
+        //        if(getMousePosition().x >= 470 && getMousePosition().x <= 530 && getMousePosition().y >= 0 && getMousePosition().y <= 60)
+        //        {
+        //            set_pos_Sentry_Gun = true;
+        //        }
+        //    }
+        //}
     }
 
     @Override
@@ -80,29 +75,20 @@ public class Zombies extends JFrame implements ActionListener , KeyListener, Mou
     }
 
     public enum STATE{MENU,PLAY};
-
-public static STATE state = STATE.MENU;
-
+    public static STATE state = STATE.MENU;
     Player player = new Player(this);
     Live live = new Live();
-
     public boolean click = false;
-
     public ArrayList<Med_Kit_Help> med_kit_help = new ArrayList<>();
     public boolean med_kit_call = false;
     public boolean med_kit_use = false;
     public static int local_pos_med_x = 0;
     public static int local_pos_med_y = 0;
     BufferedImage fon = new BufferedImage(Z_WIDTH, Z_HEIGHT, BufferedImage.TYPE_INT_RGB);
-
     Sentry_Gun_Help _Sentry_Gun = new Sentry_Gun_Help(this);
     private Image _Gun_Image = new ImageIcon(getClass().getResource("/image/sentry_gun.png")).getImage();
     boolean set_pos_Sentry_Gun = false;
     boolean set_image_Sentry_Gun = false;
-    //ArrayList<Sentry_Gun_Help> _Sentry_Gun_l = new ArrayList<>();
-
-
-    boolean play_sounds = false;
 
     JPanel fonPanel = new JPanel()
     {
@@ -147,9 +133,6 @@ public static STATE state = STATE.MENU;
                     }
                 }
 
-
-
-
                 if(med_kit_call)
                 {
                     med_kit_help.get(0).paint(g);
@@ -170,14 +153,13 @@ public static STATE state = STATE.MENU;
                     }
                     zombis.get(i).paint(g);
                 }
-                live.paint(g);
 
+                live.paint(g);
 
                 if(med_kit_call)
                 {
                     med_kit_help.get(0).paint(g);
                 }
-
 
                 if(live.money >= 6666)
                 {
@@ -229,7 +211,6 @@ public static STATE state = STATE.MENU;
         addKeyListener(this);
         addMouseListener(this);
         pack();
-
     }
 
     public static void main(String[] args)
@@ -291,7 +272,7 @@ public static STATE state = STATE.MENU;
             {
                 live.money = 0;
 
-                if(fonPanel.getMousePosition().x > 150 && fonPanel.getMousePosition().x < 450 &&
+                if(fonPanel.getMousePosition() != null && fonPanel.getMousePosition().x > 150 && fonPanel.getMousePosition().x < 450 &&
                         fonPanel.getMousePosition().y > 290 && fonPanel.getMousePosition().y < 560)
                 {
                     live.font_size = 80;
@@ -313,7 +294,7 @@ public static STATE state = STATE.MENU;
         if(state.equals(STATE.MENU))
         {
 
-            if(fonPanel.getMousePosition().x > menyuha.getX() && fonPanel.getMousePosition().x < menyuha.getX() + menyuha.getWidth() &&
+            if(fonPanel.getMousePosition() != null && fonPanel.getMousePosition().x > menyuha.getX() && fonPanel.getMousePosition().x < menyuha.getX() + menyuha.getWidth() &&
                     fonPanel.getMousePosition().y > (menyuha.getY()+140)*0+100 && fonPanel.getMousePosition().y < (menyuha.getY()+140)*0 + 100 + menyuha.getHeight())
             {
                 menyuha.btn_game_play = true;
@@ -332,7 +313,7 @@ public static STATE state = STATE.MENU;
                 menyuha.scale_font[0] = 60;
             }
 
-            if(fonPanel.getMousePosition().x > menyuha.getX() && fonPanel.getMousePosition().x < menyuha.getX() + menyuha.getWidth() &&
+            if(fonPanel.getMousePosition() != null && fonPanel.getMousePosition().x > menyuha.getX() && fonPanel.getMousePosition().x < menyuha.getX() + menyuha.getWidth() &&
                     fonPanel.getMousePosition().y > (menyuha.getY()+140)*1+100 && fonPanel.getMousePosition().y < (menyuha.getY()+140)*1+ 100 + menyuha.getHeight())
             {
                 menyuha.scale_font[1] = 80;
@@ -495,16 +476,6 @@ public static STATE state = STATE.MENU;
                     zombis.clear();
                     state = STATE.PLAY;
                     break;
-                //case  KeyEvent.VK_M:
-                //    if(play_sounds)
-                //    {
-                //        play_sounds = false;
-                //    }
-                //    else
-                //    {
-                //        play_sounds = true;
-                //    }
-                //    break;
             }
         }
     }
@@ -517,7 +488,6 @@ public static STATE state = STATE.MENU;
 
         Med_Kit_Help new_med_kit = new Med_Kit_Help();
         med_kit_help.add(new_med_kit);
-
     }
 
     @Override
@@ -528,7 +498,6 @@ public static STATE state = STATE.MENU;
 
     public void mousePressed(MouseEvent e)
     {
-        //взять турель
         if( state == STATE.PLAY)
         {
             if(e.getButton() == MouseEvent.BUTTON3)
@@ -549,9 +518,6 @@ public static STATE state = STATE.MENU;
 
                             if(fonPanel.getMousePosition().x >= 110 && fonPanel.getMousePosition().x <= 290 && fonPanel.getMousePosition().y >= _Sentry_Gun._pozitions[i] + 100 && fonPanel.getMousePosition().y <= _Sentry_Gun._pozitions[i] + 150)
                             {
-                                //Sentry_Gun_Help _sentry_gun = new Sentry_Gun_Help(this);
-                                //_Sentry_Gun_l.add(_sentry_gun);
-                                //_Sentry_Gun_l.get(_Sentry_Gun_l.size() - 1).pose = i;
                                 _Sentry_Gun.pose = i;
                                 set_pos_Sentry_Gun = false;
                             }
@@ -602,13 +568,11 @@ public static STATE state = STATE.MENU;
                 }
             }
         }
-
     }
 
     @Override
     public void mouseEntered(MouseEvent e)
     {
-
         if( state == STATE.PLAY)
         {
             if(e.getButton() == MouseEvent.BUTTON3)
@@ -635,14 +599,16 @@ public static STATE state = STATE.MENU;
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent e)
+    {
 
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        switch(e.getKeyCode()) {
-
+    public void keyReleased(KeyEvent e)
+    {
+        switch(e.getKeyCode())
+        {
             case KeyEvent.VK_SPACE:
                 flock = false;
                 break;
@@ -666,6 +632,8 @@ public static STATE state = STATE.MENU;
                     Clip clip = AudioSystem.getClip();
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream( new BufferedInputStream(Zombies.class.getResourceAsStream("/sounds/" + url)));
                     clip.open(inputStream);
+                    //volume_controller = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                    //clip.setFramePosition(0);
                     clip.start();
                 }
                 catch (Exception e)
@@ -675,6 +643,5 @@ public static STATE state = STATE.MENU;
             }
         }).start();
     }
-
 
 }

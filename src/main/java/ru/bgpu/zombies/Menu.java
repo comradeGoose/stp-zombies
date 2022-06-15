@@ -33,7 +33,6 @@ public class Menu
         buttno_text_color = Color.WHITE;
     }
 
-
     public int getX()
     {
         return x;
@@ -54,25 +53,19 @@ public class Menu
 
     public void draw(Graphics g)
     {
-
         for(int i = 0; i < list_btn.length; i++)
         {
             g.drawImage(fon, (int)x,(int)(y+140)*i+100,null);
-
             g.setColor(buttno_text_color);
             g.setFont(new Font("Bauhaus 93",Font.ITALIC,scale_font[i]));
-
             long length_btn_name = (int)g.getFontMetrics().getStringBounds(list_btn[i], g ).getWidth();
             g.drawString(list_btn[i],(int)(x + width / 2)-(int)(length_btn_name / 2), (int)((y + 140) * i + 100 + (height / 3)*2));
         }
-
         g.drawImage(new ImageIcon(getClass().getResource("/image/LOGO.png")).getImage(), Zombies.Z_WIDTH/2 - 100, Zombies.Z_HEIGHT/2 - 200, null);
-        //g.drawString("♂",Zombies.Z_WIDTH/2 - 50,  + 50);
 
         if(btn_game_play)
             {
                 g.drawImage(game_play,Zombies.Z_WIDTH/2 - 50,Zombies.Z_HEIGHT/2 - 100,null);
-
             }
 
         }

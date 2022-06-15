@@ -71,7 +71,6 @@ public class Sentry_Gun_Help
 
     }
 
-
     public void fire()
     {
         _fireIndex = 0;

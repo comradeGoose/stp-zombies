@@ -4,7 +4,8 @@ package ru.bgpu.zombies;
 import java.awt.Graphics;
 import java.util.Random;
 
-public class Zombi {
+public class Zombi
+{
     
     public final static int pozitions[] = {70, 170, 270};
     

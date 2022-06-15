@@ -9,7 +9,8 @@ import java.sql.SQLOutput;
 import javax.swing.ImageIcon;
 
 
-public class Live {
+public class Live
+{
     public int _time;
     public int font_size = 60;
     Image button_fon = new ImageIcon(getClass().getResource("/image/mainmenu_1.png")).getImage();
@@ -44,11 +45,15 @@ public class Live {
 
 
 
-        } else {
-            for(int i=0; i<live; i++) {
+        }
+        else
+        {
+            for(int i=0; i<live; i++)
+            {
                 g.drawImage(h, 30+i*35, 10, null);
             }
-            for(int i=0; i<4; i++) {
+            for(int i=0; i<4; i++)
+            {
                 med_kit_icon_[i] = new ImageIcon(getClass().getResource("/image/med_kit_icon_"+ med_kit_icon_index[i] +".png")).getImage();
                 g.drawImage(med_kit_icon_[i], 200+i*35, 10, null);
             }
@@ -61,7 +66,8 @@ public class Live {
         g.setFont(font);
         g.setColor(Color.GREEN);
         g.drawString(Integer.toString(money), Zombies.Z_WIDTH-150, 37);
-        if(++iteration == interval) {
+        if(++iteration == interval)
+        {
             money++;
             _time++;
             //System.out.println(_time);
@@ -69,7 +75,8 @@ public class Live {
         iteration %= interval;
     }
     
-    public void kill(){
+    public void kill()
+    {
         live--;
         go = live == 0;
         money -= 300;
